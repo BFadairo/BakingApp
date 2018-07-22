@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.android.bakingapp.Utils.Json.JsonUtils;
 import com.example.android.bakingapp.Utils.Networking.GetRecipeData;
 import com.example.android.bakingapp.Utils.Networking.RetrofitInstance;
 import com.example.android.bakingapp.model.Recipe;
@@ -27,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getJson();
-
         Log.v(LOG_TAG, mRecipes + "");
+
+        JsonUtils.getSampleData();
 
     }
 
