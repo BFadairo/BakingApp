@@ -33,7 +33,6 @@ public class MasterListFragment extends Fragment {
         }
     }
 
-    // Inflates the GridView of all AndroidMe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,8 +44,7 @@ public class MasterListFragment extends Fragment {
 
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the image resources to display
-        //TODO: Adapter has to be changed to account for not having local image assets
-        //MasterListAdapter mAdapter = new MasterListAdapter(getContext(), AndroidImageAssets.getAll());
+        //TODO: Complete the rest of this
 
         // Set the adapter on the GridView
         //gridView.setAdapter(mAdapter);
