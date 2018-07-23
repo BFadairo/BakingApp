@@ -3,8 +3,8 @@ package com.example.android.bakingapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.example.android.bakingapp.Utils.Json.JsonUtils;
 import com.example.android.bakingapp.Utils.Networking.GetRecipeData;
 import com.example.android.bakingapp.Utils.Networking.RetrofitInstance;
 import com.example.android.bakingapp.model.Recipe;
@@ -22,35 +22,41 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Recipe> mRecipes = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.v(LOG_TAG, mRecipes + "");
+        //Use below method to perform Retrofit
+        retrieveJson();
 
-        JsonUtils.getSampleData();
 
     }
 
-
-    private void getJson() {
-
+    private void retrieveJson() {
         GetRecipeData recipeData = new RetrofitInstance().getRetrofitInstance().create(GetRecipeData.class);
 
         Call<List<Recipe>> call = recipeData.getRecipes();
+        //Used to determine if link is set-up correctly
+        //Log.v(LOG_TAG, call.request().toString() + "Url")
 
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                mRecipes = response.body();
-                Log.v(LOG_TAG, mRecipes + "jsonData");
+                if (response.isSuccessful()) {
+                    mRecipes.clear();
+                    mRecipes.addAll(response.body());
+                    Log.v(LOG_TAG, mRecipes + "jsonData");
+                    //for (int i = 0; i < mRecipes.size(); i++){
+                    //    Log.v(LOG_TAG, mRecipes.get(i).name);
+                    //}
+                }
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Log.v(LOG_TAG, "Error on network");
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.v(LOG_TAG, t.getMessage());
             }
         });
     }

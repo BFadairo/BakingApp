@@ -7,7 +7,7 @@ public class Ingredient {
 
     @SerializedName("quantity")
     @Expose
-    public Integer quantity;
+    public double quantity;
     @SerializedName("measure")
     @Expose
     public String measure;
@@ -26,7 +26,7 @@ public class Ingredient {
      * @param ingredient
      * @param quantity
      */
-    public Ingredient(Integer quantity, String measure, String ingredient) {
+    public Ingredient(Double quantity, String measure, String ingredient) {
         super();
         this.quantity = quantity;
         this.measure = measure;
@@ -36,7 +36,7 @@ public class Ingredient {
     /**
      * Getter used to get Ingredient Quantity
      */
-    public int getIngredientQuantity() {
+    public double getIngredientQuantity() {
         return quantity;
     }
 
