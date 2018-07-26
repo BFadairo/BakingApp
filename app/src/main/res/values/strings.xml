@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">BakingApp</string>
+
+    <!-- Strings related to Extra Intent Fields -->
+    <string name="recipe_extras">recipe_extras</string>
+
+    <!-- Strings related to View hints -->
+    <string name="recipe_name_hint">Recipe Name</string>
+
+    <!-- Strings related to ViewFields -->
+    <string name="serving_size">Serving Size:</string>
 </resources>

@@ -3,23 +3,25 @@ package com.example.android.bakingapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Step {
+import java.io.Serializable;
+
+public class Step implements Serializable {
 
     @SerializedName("id")
     @Expose
-    public Integer id;
+    private Integer id;
     @SerializedName("shortDescription")
     @Expose
-    public String shortDescription;
+    private String shortDescription;
     @SerializedName("description")
     @Expose
-    public String description;
+    private String description;
     @SerializedName("videoURL")
     @Expose
-    public String videoURL;
+    private String videoURL;
     @SerializedName("thumbnailURL")
     @Expose
-    public String thumbnailURL;
+    private String thumbnailURL;
 
     /**
      * No args constructor for use in serialization

@@ -3,17 +3,19 @@ package com.example.android.bakingapp.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
 
     @SerializedName("quantity")
     @Expose
-    public double quantity;
+    private double quantity;
     @SerializedName("measure")
     @Expose
-    public String measure;
+    private String measure;
     @SerializedName("ingredient")
     @Expose
-    public String ingredient;
+    private String ingredient;
 
     /**
      * No args constructor for use in serialization
