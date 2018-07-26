@@ -89,7 +89,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.Ad
 
     public void populateUi() {
         // Create the adapter
-        // This adapter takes in the context and an ArrayList of ALL the image resources to display
+        // This adapter takes in the context and an ArrayList of ALL recipes currently in the Json
         //TODO: Complete the rest of this
         mAdapter = new MasterListAdapter(getContext(), mRecipes, this);
 

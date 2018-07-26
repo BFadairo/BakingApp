@@ -6,6 +6,7 @@
 
     <!-- Strings related to View hints -->
     <string name="recipe_name_hint">Recipe Name</string>
+    <string name="step_hint">Step</string>
 
     <!-- Strings related to ViewFields -->
     <string name="serving_size">Serving Size:</string>

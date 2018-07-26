@@ -19,8 +19,10 @@ import static com.example.android.bakingapp.MainActivity.RECIPE_EXTRAS;
 
 public class IngredientFragment extends Fragment {
 
-    //Variables used to store Recipe information
-    Recipe recipe;
+    //Variables used
+    private Recipe recipe;
+    private List<Ingredient> ingredientList;
+    private Bundle passedArgs;
     //Variables to store view fields
     private TextView quantityView, measureView, ingredientView;
 
@@ -37,20 +39,23 @@ public class IngredientFragment extends Fragment {
         quantityView = rootView.findViewById(R.id.quantity_view);
         measureView = rootView.findViewById(R.id.measure_view);
 
+        passedArgs = getArguments();
+
+        recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
+
         populateUI();
 
         return rootView;
     }
 
     public void populateUI() {
-        recipe = getActivity().getIntent().getParcelableExtra(RECIPE_EXTRAS);
+        ingredientList = recipe.getIngredients();
 
-        List<Ingredient> ingredientsLiist = recipe.getIngredients();
-
+        //TODO Implement Decimal formatting
         DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
-        for (int i = 0; i < ingredientsLiist.size(); i++) {
-            Ingredient ingredient = ingredientsLiist.get(i);
+        for (int i = 0; i < ingredientList.size(); i++) {
+            Ingredient ingredient = ingredientList.get(i);
             ingredientView.append(ingredient.getRecipeIngredient() + "\n");
             double ingredientQuant = ingredient.getIngredientQuantity();
             quantityView.append(ingredientQuant + "\n");

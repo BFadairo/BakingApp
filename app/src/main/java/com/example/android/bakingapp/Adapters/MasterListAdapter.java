@@ -72,10 +72,13 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
                 recipeImage.setImageResource(R.drawable.brownies);
                 break;
             case "Nutella Pie":
+                recipeImage.setImageResource(R.drawable.cheesecake);
                 break;
             case "Yellow Cake":
+                recipeImage.setImageResource(R.drawable.cheesecake);
                 break;
             case "Cheesecake":
+                recipeImage.setImageResource(R.drawable.cheesecake);
                 break;
         }*/
     }
