@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,8 +47,6 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
 
         recyclerView = rootView.findViewById(R.id.step_recycler_view);
-        stepNumberView = rootView.findViewById(R.id.step_number);
-        stepDescriptionView = rootView.findViewById(R.id.step_description);
         //Retrieve the Arguments from the parent activity
         passedArgs = getArguments();
         //Get the Recipe object from the Bundle
@@ -71,6 +70,8 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
 
         // Set the adapter on the RecyclerView
         recyclerView.setAdapter(mAdapter);
+        recyclerView.setFocusable(false);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         //Create a LinearLayout manager
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);

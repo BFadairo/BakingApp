@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/exoplayer_view"
+    <FrameLayout
+        android:id="@+id/exo_player_container"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/exoplayer_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/exo_player_height"
+            app:resize_mode="fixed_width" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/step_detail_description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:hint="@string/step_hint"
+        android:textAlignment="center"
         android:textStyle="bold" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/previous_step"
+        android:layout_width="@dimen/button_dimensions"
+        android:layout_height="@dimen/button_dimensions"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@drawable/left_arrow" />
+
+    <Button
+        android:id="@+id/next_step"
+        android:layout_width="@dimen/button_dimensions"
+        android:layout_height="@dimen/button_dimensions"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:background="@drawable/right_arrow" />
+
+
+</RelativeLayout>

@@ -33,6 +33,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
         View textView =
                 inflater.inflate(R.layout.step_list, parent, false);
 
+
         return new ViewHolder(textView);
     }
 
@@ -45,9 +46,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
         TextView stepDescriptionView = holder.stepDescriptionView;
 
-        int stepNumber = currentStep.getStepId() + 1;
-
-        stepNumberView.setText("Step " + String.valueOf(stepNumber) + ":");
+        //Yellow cake seems to be missing a step below used to handle
+        stepNumberView.setText("Step " + String.valueOf(position) + ":");
 
         stepDescriptionView.setText(currentStep.getStepShortDescription());
 
