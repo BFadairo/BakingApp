@@ -3,6 +3,7 @@ package com.example.android.bakingapp.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.android.bakingapp.MainActivity.RECIPE_EXTRAS;
+import static com.example.android.bakingapp.MainActivity.mTwoPane;
 
 public class MasterListFragment extends Fragment implements MasterListAdapter.AdapterOnClick {
 
@@ -96,10 +98,16 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.Ad
         // Set the adapter on the RecyclerView
         recyclerView.setAdapter(mAdapter);
 
-        //Create a LinearLayout manager
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        //Create a LinearLayout manager if a twopane layout is not needed
+        if (mTwoPane) {
+            int numberOfColumns = 3;
+            layoutManager = new GridLayoutManager(getContext(), numberOfColumns);
+            recyclerView.setLayoutManager(layoutManager);
+        } else {
+            layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(layoutManager);
 
+        }
     }
 
 
@@ -109,4 +117,5 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.Ad
         detailActivity.putExtra(RECIPE_EXTRAS, recipe);
         startActivity(detailActivity);
     }
+
 }

@@ -10,4 +10,5 @@
 
     <!-- Strings related to ViewFields -->
     <string name="serving_size">Serving Size:</string>
+    <string name="step_description">Description</string>
 </resources>

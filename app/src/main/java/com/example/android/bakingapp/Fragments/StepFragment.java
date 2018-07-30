@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.android.bakingapp.Adapters.StepAdapter;
 import com.example.android.bakingapp.R;
@@ -21,6 +20,7 @@ import com.example.android.bakingapp.model.Step;
 import java.util.List;
 
 import static com.example.android.bakingapp.MainActivity.RECIPE_EXTRAS;
+import static com.example.android.bakingapp.MainActivity.mTwoPane;
 
 public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick {
 
@@ -33,8 +33,7 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
     private Recipe recipe;
     private List<Step> mSteps;
     private Bundle passedArgs;
-    //Variables to store view fields
-    private TextView stepNumberView, stepDescriptionView;
+    public SendStepData stepInterface;
 
 
     public StepFragment() {
@@ -51,8 +50,9 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
         passedArgs = getArguments();
         //Get the Recipe object from the Bundle
         recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
+        stepInterface = (SendStepData) getActivity();
 
-        retrieveSteps();
+        populateUI();
         return rootView;
     }
 
@@ -60,10 +60,10 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
     public void retrieveSteps() {
         //Receive the steps from the current Recipe
         mSteps = recipe.getSteps();
-        populateUI();
     }
 
     public void populateUI() {
+        retrieveSteps();
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the steps with associated recipe
         mAdapter = new StepAdapter(getContext(), mSteps, this);
@@ -80,9 +80,17 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
 
     @Override
     public void onClick(Step step) {
-        Intent stepActivity = new Intent(getContext(), StepActivity.class);
-        stepActivity.putExtra(STEP_EXTRAS, step);
-        stepActivity.putExtra(RECIPE_EXTRAS, recipe);
-        startActivity(stepActivity);
+        if (!(mTwoPane)) {
+            Intent stepActivity = new Intent(getContext(), StepActivity.class);
+            stepActivity.putExtra(STEP_EXTRAS, step);
+            stepActivity.putExtra(RECIPE_EXTRAS, recipe);
+            startActivity(stepActivity);
+        } else {
+            stepInterface.sendSteps(step);
+        }
+    }
+
+    public interface SendStepData {
+        void sendSteps(Step step);
     }
 }

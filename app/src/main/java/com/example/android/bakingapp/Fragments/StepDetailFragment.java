@@ -1,9 +1,12 @@
 package com.example.android.bakingapp.Fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,7 @@ import java.util.ArrayList;
 
 import static com.example.android.bakingapp.Fragments.StepFragment.STEP_EXTRAS;
 import static com.example.android.bakingapp.MainActivity.RECIPE_EXTRAS;
+import static com.example.android.bakingapp.MainActivity.mTwoPane;
 import static com.example.android.bakingapp.StepActivity.LIST_EXTRAS;
 
 public class StepDetailFragment extends Fragment {
@@ -44,10 +48,9 @@ public class StepDetailFragment extends Fragment {
     private FrameLayout fullscreenButton;
     private ImageView fullscreenIcon;
     private Button nextStep, previousStep;
-    private ArrayList<Step> stepList = new ArrayList<>();
+    private ArrayList<Step> stepList;
     private Step step;
     private Recipe recipe;
-    private int orientationValue;
     private Bundle passedArgs;
 
     @Nullable
@@ -65,37 +68,52 @@ public class StepDetailFragment extends Fragment {
 
         passedArgs = getArguments();
 
-        step = passedArgs.getParcelable(STEP_EXTRAS);
-        stepList = passedArgs.getParcelable(LIST_EXTRAS);
+        stepList = passedArgs.getParcelableArrayList(LIST_EXTRAS);
         recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
 
-        getActivity().setTitle(step.getStepShortDescription());
-
-        populateUI();
-        initializeFullScreenButton();
-        initializeButtons();
+        if (!mTwoPane) {
+            step = passedArgs.getParcelable(STEP_EXTRAS);
+            getActivity().setTitle(step.getStepShortDescription());
+            populateUI(getContext());
+            initializeFullScreenButton();
+            initializeButtons();
+            hideButtons();
+        }
 
         return rootView;
     }
 
-    public void populateUI() {
+    public void populateUI(Context context) {
         //Retrieve the Video url from the Step object and initialize player with it
-        initializePlayer(Uri.parse(step.getStepUrl()));
+        if (step.getStepUrl().isEmpty()) {
+            initializePlayer(context, Uri.parse(step.getStepThumbnailUrl()));
+        } else {
+            initializePlayer(context, Uri.parse(step.getStepUrl()));
+        }
 
         //Set the Text on the description view to the step description
         stepDescription.setText(step.getStepDescription());
     }
 
-    public void initializePlayer(Uri mediaLink) {
+    public void receiveStepInterface(Context context, Step currentStep) {
+        step = currentStep;
+        populateUI(context);
+        initializeButtons();
+        initializeFullScreenButton();
+        hideButtons();
+        Log.v(LOG_TAG, currentStep + "");
+    }
+
+    public void initializePlayer(Context context, Uri mediaLink) {
         if (exoPlayer == null && mediaLink != null) {
             //Create an Instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
-            exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+            exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
 
             //Prepare the MediaSource
-            String userAgent = Util.getUserAgent(getContext(), getResources().getString(R.string.app_name));
+            String userAgent = Util.getUserAgent(context, context.getResources().getString(R.string.app_name));
             //Create the DataSource
-            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
                     userAgent, null);
             //Create the Media Source
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
@@ -105,6 +123,9 @@ public class StepDetailFragment extends Fragment {
             exoPlayer.prepare(mediaSource);
             simpleExoPlayerView.setPlayer(exoPlayer);
             exoPlayer.setPlayWhenReady(true);
+        } else {
+            releasePlayer();
+            populateUI(getContext());
         }
     }
 
@@ -132,7 +153,6 @@ public class StepDetailFragment extends Fragment {
 
 
     public void initializeFullScreenButton() {
-        orientationValue = getActivity().getResources().getConfiguration().orientation;
         PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
         fullscreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         fullscreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
@@ -158,6 +178,7 @@ public class StepDetailFragment extends Fragment {
                     int currentStep;
                     currentStep = step.getStepId();
                     step = stepList.get(currentStep - 1);
+                    refreshFragment();
                     Log.v(LOG_TAG, step.getStepId() + "previous step");
                     Log.v(LOG_TAG, stepList.size() + "Size");
                 }
@@ -173,6 +194,12 @@ public class StepDetailFragment extends Fragment {
         });
     }
 
+    public void refreshFragment() {
+        populateUI(getContext());
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.step_detail_container, this);
+    }
+
     public void getNextStep() {
         nextStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +207,8 @@ public class StepDetailFragment extends Fragment {
                 if (step.getStepId() < stepList.size() - 1 || ((recipe.getRecipeName().equals("Yellow Cake")) && step.getStepId() < stepList.size())) {
                     int currentStep;
                     currentStep = step.getStepId();
+                    step = stepList.get(currentStep + 1);
+                    refreshFragment();
                     Log.v(LOG_TAG, step.getStepId() + "next step");
                     Log.v(LOG_TAG, stepList.size() + "Size");
                 }
@@ -194,6 +223,21 @@ public class StepDetailFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //TODO Implement both methods to handle phone rotations
+    }
+
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        //TODO Implement both methods to handle phone rotations
+    }
+
+
 
     public void hideButtons() {
         if (step.getStepId() == 0) {
@@ -235,6 +279,4 @@ public class StepDetailFragment extends Fragment {
             releasePlayer();
         }
     }
-
-
 }

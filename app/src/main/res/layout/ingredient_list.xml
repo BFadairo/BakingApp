@@ -6,32 +6,31 @@
     android:orientation="horizontal">
 
     <TextView
+        android:id="@+id/quantity_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:hint="5"
+        android:textSize="@dimen/text_size"
+        android:textStyle="italic" />
+
+    <TextView
         android:id="@+id/ingredient_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:hint="Ingredients go here"
         android:textSize="@dimen/text_size"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/quantity_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginRight="10dp"
-        android:layout_weight="1"
-        android:hint="5"
-        android:textAlignment="textEnd"
-        android:textSize="@dimen/text_size"
-        android:textStyle="italic" />
-
-    <TextView
         android:id="@+id/measure_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="center_vertical"
         android:hint="cups"
-        android:textAlignment="textEnd"
         android:textSize="@dimen/text_size" />
 
 </LinearLayout>

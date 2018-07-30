@@ -83,6 +83,5 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
             Step step = mSteps.get(adapterPosition);
             mClickHandler.onClick(step);
         }
-
     }
 }

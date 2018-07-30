@@ -6,17 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import com.example.android.bakingapp.Fragments.IngredientFragment;
+import com.example.android.bakingapp.Fragments.StepDetailFragment;
 import com.example.android.bakingapp.Fragments.StepFragment;
 import com.example.android.bakingapp.model.Recipe;
+import com.example.android.bakingapp.model.Step;
+
+import java.util.ArrayList;
 
 import static com.example.android.bakingapp.MainActivity.RECIPE_EXTRAS;
+import static com.example.android.bakingapp.MainActivity.mTwoPane;
+import static com.example.android.bakingapp.StepActivity.LIST_EXTRAS;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements StepFragment.SendStepData {
 
-    private final static String LOG_TAG = DetailActivity.class.getSimpleName();
     private Recipe recipe;
     private LinearLayout twoPaneLayout;
-    private boolean mTwoPane;
+    private StepDetailFragment stepDetailFragment;
+    private ArrayList<Step> stepList;
+    private Bundle argsToPass = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +31,11 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         twoPaneLayout = findViewById(R.id.two_pane);
 
+
         //Get the intent that started the Activity and put it into a Recipe Object
         if (savedInstanceState == null) {
             recipe = getIntent().getParcelableExtra(RECIPE_EXTRAS);
+            stepList = recipe.getSteps();
             this.setTitle(recipe.getRecipeName());
 
             //Create a new Ingredient Fragment
@@ -47,8 +56,27 @@ public class DetailActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .add(R.id.step_container, stepFragment)
                     .commit();
-        } else {
-            mTwoPane = false;
+
+            if (mTwoPane && stepDetailFragment == null) {
+                argsToPass.putParcelableArrayList(LIST_EXTRAS, stepList);
+                argsToPass.putParcelable(RECIPE_EXTRAS, recipe);
+                stepDetailFragment = new StepDetailFragment();
+                stepDetailFragment.setArguments(argsToPass);
+                fragmentManager.beginTransaction()
+                        .add(R.id.step_detail_container, stepDetailFragment)
+                        .commit();
+            }
         }
+    }
+
+    @Override
+    public void sendSteps(Step step) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        stepDetailFragment.setArguments(argsToPass);
+        fragmentManager.beginTransaction()
+                .replace(R.id.step_detail_container, stepDetailFragment)
+                .commit();
+
+        stepDetailFragment.receiveStepInterface(this, step);
     }
 }

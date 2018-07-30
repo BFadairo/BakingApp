@@ -48,9 +48,7 @@ public class StepActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .add(R.id.step_detail_container, stepDetailFragment)
                     .commit();
-
         }
     }
-
 
 }

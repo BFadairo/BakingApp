@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Related to Layout/View dimensions -->
-    <dimen name="exo_player_height">250dp</dimen>
+    <dimen name="exo_player_height">350dp</dimen>
     <dimen name="button_dimensions">50dp</dimen>
     <dimen name="fragment_step_layout_margin">16dp</dimen>
     <dimen name="recipe_list_card_width">450dp</dimen>
