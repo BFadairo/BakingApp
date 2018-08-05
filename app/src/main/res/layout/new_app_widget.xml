@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAccent"
     android:padding="@dimen/widget_margin">
 
@@ -9,9 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:fontFamily="sans-serif"
-        android:hint="Recipe Name"
-        android:textSize="24sp" />
+        android:hint="@string/recipe_name_hint"
+        android:textSize="24sp"
+        app:fontFamily="sans-serif" />
 
     <TextView
         android:id="@+id/widget_ingredient_list"
@@ -20,9 +21,8 @@
         android:layout_below="@id/widget_recipe_name"
         android:layout_centerInParent="true"
         android:layout_margin="8dp"
-        android:contentDescription="@string/appwidget_text"
-        android:hint="Ingredient List"
-        android:textSize="24sp"
+        android:hint="@string/app_widget_text_hint"
+        android:textSize="12sp"
         android:textStyle="bold|italic" />
 
 </RelativeLayout>

@@ -24,9 +24,9 @@ public class Ingredient implements Serializable {
     }
 
     /**
-     * @param measure
-     * @param ingredient
-     * @param quantity
+     * @param measure size for the Ingredient
+     * @param ingredient name of the ingredient
+     * @param quantity amount of the ingredient
      */
     public Ingredient(Double quantity, String measure, String ingredient) {
         super();

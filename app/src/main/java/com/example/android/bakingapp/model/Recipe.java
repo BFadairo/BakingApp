@@ -36,6 +36,9 @@ public class Recipe implements Parcelable {
     @SerializedName("servings")
     @Expose
     private Integer servings;
+    @SerializedName("image")
+    @Expose
+    private String image;
 
     /**
      * No args constructor for use in serialization
@@ -44,12 +47,12 @@ public class Recipe implements Parcelable {
     }
 
     /**
-     * @param ingredients
-     * @param id
-     * @param servings
-     * @param name
-     * @param image
-     * @param steps
+     * @param ingredients a list of all the ingredients associated with the recipe
+     * @param id          of the recipe in the database
+     * @param servings    size that the recipe makes
+     * @param name        the name of the recipe
+     * @param image       an image of the recipe
+     * @param steps       a list of all the steps associated with the recipe
      */
     public Recipe(Integer id, String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, Integer servings, String image) {
         super();
@@ -89,9 +92,16 @@ public class Recipe implements Parcelable {
         return steps;
     }
 
-    @SerializedName("image")
-    @Expose
-    private String image;
+    private Recipe(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+        this.ingredients = new ArrayList<>();
+        in.readList(this.ingredients, Ingredient.class.getClassLoader());
+        this.steps = new ArrayList<>();
+        in.readList(this.steps, Step.class.getClassLoader());
+        this.servings = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.image = in.readString();
+    }
 
     /**
      * Used to get the Image of the food item
@@ -100,23 +110,13 @@ public class Recipe implements Parcelable {
         return image;
     }
 
-    protected Recipe(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.name = in.readString();
-        this.ingredients = new ArrayList<Ingredient>();
-        in.readList(this.ingredients, Ingredient.class.getClassLoader());
-        this.steps = new ArrayList<Step>();
-        in.readList(this.steps, Step.class.getClassLoader());
-        this.servings = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.image = in.readString();
-    }
-
     /**
      * Used to get the serving size of the recipe
      */
     public String getServingSize() {
         return servings.toString();
     }
+
 
     /**
      * Used to set the Image of the food item

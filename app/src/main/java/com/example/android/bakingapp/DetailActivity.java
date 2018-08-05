@@ -19,23 +19,21 @@ import static com.example.android.bakingapp.StepActivity.LIST_EXTRAS;
 
 public class DetailActivity extends AppCompatActivity implements StepFragment.SendStepData {
 
-    private Recipe recipe;
-    private LinearLayout twoPaneLayout;
     private StepDetailFragment stepDetailFragment;
-    private ArrayList<Step> stepList;
-    private Bundle argsToPass = new Bundle();
+    private final Bundle argsToPass = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        twoPaneLayout = findViewById(R.id.two_pane);
+        LinearLayout twoPaneLayout = findViewById(R.id.two_pane);
 
 
         //Get the intent that started the Activity and put it into a Recipe Object
         if (savedInstanceState == null) {
-            recipe = getIntent().getParcelableExtra(RECIPE_EXTRAS);
-            stepList = recipe.getSteps();
+            Recipe recipe = getIntent().getParcelableExtra(RECIPE_EXTRAS);
+            ArrayList<Step> stepList = recipe.getSteps();
+
             this.setTitle(recipe.getRecipeName());
 
             //Create a new Ingredient Fragment

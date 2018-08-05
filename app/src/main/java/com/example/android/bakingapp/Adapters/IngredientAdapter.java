@@ -15,11 +15,10 @@ import java.util.List;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<Ingredient> ingredientList;
+    private final List<Ingredient> ingredientList;
 
     public IngredientAdapter(Context context, List<Ingredient> ingredients) {
-        this.mContext = context;
+        Context mContext = context;
         this.ingredientList = ingredients;
     }
 

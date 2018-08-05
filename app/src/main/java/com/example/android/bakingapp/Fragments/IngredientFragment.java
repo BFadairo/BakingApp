@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -24,9 +25,6 @@ public class IngredientFragment extends Fragment {
     //Variables used
     private Recipe recipe;
     private List<Ingredient> ingredientList;
-    private Bundle passedArgs;
-    private IngredientAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private RecyclerView recyclerView;
 
     public IngredientFragment() {
@@ -35,12 +33,12 @@ public class IngredientFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
 
         recyclerView = rootView.findViewById(R.id.ingredient_recycler_view);
 
-        passedArgs = getArguments();
+        Bundle passedArgs = getArguments();
 
         recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
 
@@ -49,10 +47,10 @@ public class IngredientFragment extends Fragment {
         return rootView;
     }
 
-    public void populateUI() {
+    private void populateUI() {
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the steps with associated recipe
-        mAdapter = new IngredientAdapter(getContext(), ingredientList);
+        IngredientAdapter mAdapter = new IngredientAdapter(getContext(), ingredientList);
 
         // Set the adapter on the RecyclerView
         recyclerView.setAdapter(mAdapter);
@@ -60,11 +58,11 @@ public class IngredientFragment extends Fragment {
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         //Create a LinearLayout manager
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    public void retrieveIngredients() {
+    private void retrieveIngredients() {
         ingredientList = recipe.getIngredients();
         populateUI();
     }

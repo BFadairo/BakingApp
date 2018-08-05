@@ -2,6 +2,7 @@ package com.example.android.bakingapp.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -27,13 +28,10 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
     //
     public final static String LOG_TAG = StepFragment.class.getSimpleName();
     public final static String STEP_EXTRAS = "step_extras";
-    private StepAdapter mAdapter;
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private Recipe recipe;
     private List<Step> mSteps;
-    private Bundle passedArgs;
-    public SendStepData stepInterface;
+    private SendStepData stepInterface;
 
 
     public StepFragment() {
@@ -42,12 +40,12 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
 
         recyclerView = rootView.findViewById(R.id.step_recycler_view);
         //Retrieve the Arguments from the parent activity
-        passedArgs = getArguments();
+        Bundle passedArgs = getArguments();
         //Get the Recipe object from the Bundle
         recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
         stepInterface = (SendStepData) getActivity();
@@ -57,16 +55,16 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
     }
 
 
-    public void retrieveSteps() {
+    private void retrieveSteps() {
         //Receive the steps from the current Recipe
         mSteps = recipe.getSteps();
     }
 
-    public void populateUI() {
+    private void populateUI() {
         retrieveSteps();
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the steps with associated recipe
-        mAdapter = new StepAdapter(getContext(), mSteps, this);
+        StepAdapter mAdapter = new StepAdapter(getContext(), mSteps, this);
 
         // Set the adapter on the RecyclerView
         recyclerView.setAdapter(mAdapter);
@@ -74,7 +72,7 @@ public class StepFragment extends Fragment implements StepAdapter.AdapterOnClick
         ViewCompat.setNestedScrollingEnabled(recyclerView, false);
 
         //Create a LinearLayout manager
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
     }
 

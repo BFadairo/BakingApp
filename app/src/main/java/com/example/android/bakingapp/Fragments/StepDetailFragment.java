@@ -40,22 +40,22 @@ import static com.example.android.bakingapp.StepActivity.LIST_EXTRAS;
 
 public class StepDetailFragment extends Fragment {
 
-    public static final String LOG_TAG = StepDetailFragment.class.getSimpleName();
+    private static final String LOG_TAG = StepDetailFragment.class.getSimpleName();
     private SimpleExoPlayer exoPlayer;
     private static boolean exoFullscreen;
     private TextView stepDescription;
     private PlayerView simpleExoPlayerView;
-    private FrameLayout fullscreenButton;
     private ImageView fullscreenIcon;
     private Button nextStep, previousStep;
     private ArrayList<Step> stepList;
     private Step step;
     private Recipe recipe;
-    private Bundle passedArgs;
+
+    private final String EXOPLAYER_EXTRA = "exoplayer_extras";
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
         simpleExoPlayerView = rootView.findViewById(R.id.exoplayer_view);
@@ -66,10 +66,15 @@ public class StepDetailFragment extends Fragment {
 
         previousStep = rootView.findViewById(R.id.previous_step);
 
-        passedArgs = getArguments();
+        Bundle passedArgs = getArguments();
 
         stepList = passedArgs.getParcelableArrayList(LIST_EXTRAS);
         recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
+
+        if (savedInstanceState != null) {
+            long exoplayerPosition = savedInstanceState.getLong(EXOPLAYER_EXTRA);
+            exoPlayer.seekTo(exoplayerPosition);
+        }
 
         if (!mTwoPane) {
             step = passedArgs.getParcelable(STEP_EXTRAS);
@@ -83,7 +88,7 @@ public class StepDetailFragment extends Fragment {
         return rootView;
     }
 
-    public void populateUI(Context context) {
+    private void populateUI(Context context) {
         //Retrieve the Video url from the Step object and initialize player with it
         if (step.getStepUrl().isEmpty()) {
             initializePlayer(context, Uri.parse(step.getStepThumbnailUrl()));
@@ -104,7 +109,7 @@ public class StepDetailFragment extends Fragment {
         Log.v(LOG_TAG, currentStep + "");
     }
 
-    public void initializePlayer(Context context, Uri mediaLink) {
+    private void initializePlayer(Context context, Uri mediaLink) {
         if (exoPlayer == null && mediaLink != null) {
             //Create an Instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -129,21 +134,21 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    public void goFullscreen() {
+    private void goFullscreen() {
         FrameLayout.LayoutParams params =
                 (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-        params.width = params.MATCH_PARENT;
-        params.height = params.MATCH_PARENT;
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
         simpleExoPlayerView.setLayoutParams(params);
         fullscreenIcon.setImageResource(R.drawable.compress_white);
         previousStep.setVisibility(View.GONE);
         nextStep.setVisibility(View.GONE);
     }
 
-    public void closeFullscreen() {
+    private void closeFullscreen() {
         FrameLayout.LayoutParams params =
                 (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-        params.width = params.MATCH_PARENT;
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = (int) getResources().getDimension(R.dimen.exo_player_height);
         simpleExoPlayerView.setLayoutParams(params);
         fullscreenIcon.setImageResource(R.drawable.enlarge_white);
@@ -152,9 +157,9 @@ public class StepDetailFragment extends Fragment {
     }
 
 
-    public void initializeFullScreenButton() {
+    private void initializeFullScreenButton() {
         PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
-        fullscreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
+        FrameLayout fullscreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         fullscreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +175,7 @@ public class StepDetailFragment extends Fragment {
         });
     }
 
-    public void getPreviousStep() {
+    private void getPreviousStep() {
         previousStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,13 +199,13 @@ public class StepDetailFragment extends Fragment {
         });
     }
 
-    public void refreshFragment() {
+    private void refreshFragment() {
         populateUI(getContext());
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.step_detail_container, this);
     }
 
-    public void getNextStep() {
+    private void getNextStep() {
         nextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,19 +232,15 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putLong(EXOPLAYER_EXTRA, exoPlayer.getCurrentPosition());
         //TODO Implement both methods to handle phone rotations
     }
 
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        //TODO Implement both methods to handle phone rotations
-    }
-
-
-
-    public void hideButtons() {
+    /**
+     * Method used to initially hide the buttons
+     */
+    private void hideButtons() {
         if (step.getStepId() == 0) {
             previousStep.setVisibility(View.GONE);
         }
@@ -253,12 +254,14 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    public void initializeButtons() {
+    private void initializeButtons() {
+        //Initialize both onClickListeners for both buttons
         getNextStep();
         getPreviousStep();
     }
 
     private void releasePlayer() {
+        //Stop and release the player to avoid Memory leaks
         exoPlayer.stop();
         exoPlayer.release();
         exoPlayer = null;

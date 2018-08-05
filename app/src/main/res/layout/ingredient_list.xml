@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -10,27 +11,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/circle"
         android:gravity="center"
         android:hint="5"
         android:textSize="@dimen/text_size"
-        android:textStyle="italic" />
-
-    <TextView
-        android:id="@+id/ingredient_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:hint="Ingredients go here"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold" />
+        android:textStyle="italic"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/measure_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
         android:hint="cups"
-        android:textSize="@dimen/text_size" />
+        android:textSize="@dimen/text_size"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/ingredient_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:hint="Ingredients go here"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

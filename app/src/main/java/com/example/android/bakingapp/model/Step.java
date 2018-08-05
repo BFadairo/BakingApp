@@ -31,11 +31,11 @@ public class Step implements Parcelable {
     }
 
     /**
-     * @param id
-     * @param shortDescription
-     * @param description
-     * @param videoURL
-     * @param thumbnailURL
+     * @param id of the Step
+     * @param shortDescription the short description associated with the step
+     * @param description the long description associated with the step
+     * @param videoURL URL related ot the step video
+     * @param thumbnailURL URL related to the step video
      */
     public Step(Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
         super();
@@ -95,7 +95,7 @@ public class Step implements Parcelable {
         }
     };
 
-    protected Step(Parcel in) {
+    Step(Parcel in) {
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.shortDescription = in.readString();
         this.description = in.readString();

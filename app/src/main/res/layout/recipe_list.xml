@@ -17,6 +17,7 @@
             android:adjustViewBounds="true"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/detail_activity_image_description"
             android:src="@drawable/cheesecake" />
 
         <LinearLayout

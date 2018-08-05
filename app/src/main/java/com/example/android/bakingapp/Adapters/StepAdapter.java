@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.Adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +15,18 @@ import java.util.List;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
-    Context mContext;
-    List<Step> mSteps;
-    AdapterOnClick mClickHandler;
+    private final List<Step> mSteps;
+    private final AdapterOnClick mClickHandler;
 
     public StepAdapter(Context context, List<Step> steps, AdapterOnClick onClick) {
-        mContext = context;
+        Context mContext = context;
         mSteps = steps;
         mClickHandler = onClick;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
 
         //Create a new view
@@ -38,7 +39,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Step currentStep = mSteps.get(position);
 

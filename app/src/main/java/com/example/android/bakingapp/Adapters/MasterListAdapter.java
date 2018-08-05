@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.Adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +19,11 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
 
     private final static String LOG_TAG = MasterListAdapter.class.getSimpleName();
 
-    // Keeps track of the context and images
-    private Context mContext;
     private List<Recipe> mRecipes;
-    private AdapterOnClick clickHandler;
+    private final AdapterOnClick clickHandler;
 
     public MasterListAdapter(Context mContext, List<Recipe> recipes, AdapterOnClick onClickHandler) {
-        this.mContext = mContext;
+        Context mContext1 = mContext;
         this.mRecipes = recipes;
         this.clickHandler = onClickHandler;
     }
@@ -35,8 +34,9 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
 
         //Create a new view
@@ -48,7 +48,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Recipe currentRecipe = mRecipes.get(position);
 
         TextView recipeName = holder.recipeName;
