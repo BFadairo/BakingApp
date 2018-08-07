@@ -36,6 +36,7 @@ public class StepActivity extends AppCompatActivity {
 
             //Create a new StepDetailFragment
             StepDetailFragment stepDetailFragment = new StepDetailFragment();
+            //Insert the bundle as an argument to the above Fragment
             stepDetailFragment.setArguments(argsToPass);
 
             FragmentManager fragmentManager = getSupportFragmentManager();

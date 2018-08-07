@@ -3,7 +3,6 @@ package com.example.android.bakingapp;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
 
 import com.example.android.bakingapp.Fragments.IngredientFragment;
 import com.example.android.bakingapp.Fragments.StepDetailFragment;
@@ -26,7 +25,6 @@ public class DetailActivity extends AppCompatActivity implements StepFragment.Se
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        LinearLayout twoPaneLayout = findViewById(R.id.two_pane);
 
 
         //Get the intent that started the Activity and put it into a Recipe Object

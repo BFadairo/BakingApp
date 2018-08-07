@@ -175,6 +175,9 @@ public class StepDetailFragment extends Fragment {
         });
     }
 
+    /**
+     * This method is used to retrieve the previous Step from the step list
+     */
     private void getPreviousStep() {
         previousStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +208,10 @@ public class StepDetailFragment extends Fragment {
         fragmentTransaction.replace(R.id.step_detail_container, this);
     }
 
+    /**
+     * This method is used to retrieve the next Step from the list
+     * Special case for Yellow Cake as the data was not in order
+     */
     private void getNextStep() {
         nextStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +261,9 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
+    /**
+     * Used to initialize both buttons
+     */
     private void initializeButtons() {
         //Initialize both onClickListeners for both buttons
         getNextStep();

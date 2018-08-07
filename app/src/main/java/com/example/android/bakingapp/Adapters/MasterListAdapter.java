@@ -105,7 +105,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
             recipeName = itemView.findViewById(R.id.recipe_name);
             recipeImage = itemView.findViewById(R.id.recipe_master_image);
             layout.setOnClickListener(this);
-
         }
 
         @Override
@@ -114,6 +113,5 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
             Recipe recipe = mRecipes.get(adapterPosition);
             clickHandler.onClick(recipe);
         }
-
     }
 }

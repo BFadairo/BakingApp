@@ -88,8 +88,6 @@ public class NewAppWidget extends AppWidgetProvider {
             //Get the Widget Ids for the Application
             int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewAppWidget.class));
             intentRecipe = bundle.getParcelable("Extra");
-            //this.onUpdate(context, AppWidgetManager.getInstance(context), appWidgetIds);
-            Log.v(LOG_TAG, "Eat Feed: " + intentRecipe);
             this.onUpdate(context, AppWidgetManager.getInstance(context), ids);
         }
     }
