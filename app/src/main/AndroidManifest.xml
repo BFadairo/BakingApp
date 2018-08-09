@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/cook_book"
+        android:icon="@mipmap/ic_bakingapp"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/cook_book_round"
+        android:roundIcon="@mipmap/ic_bakingapp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

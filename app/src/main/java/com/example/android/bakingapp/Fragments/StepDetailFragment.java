@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +49,7 @@ public class StepDetailFragment extends Fragment {
     private ArrayList<Step> stepList;
     private Step step;
     private Recipe recipe;
+    private long exoPlayerPosition;
 
     private final String EXOPLAYER_EXTRA = "exoplayer_extras";
 
@@ -62,27 +62,22 @@ public class StepDetailFragment extends Fragment {
 
         stepDescription = rootView.findViewById(R.id.step_detail_description);
 
-        nextStep = rootView.findViewById(R.id.next_step);
-
-        previousStep = rootView.findViewById(R.id.previous_step);
-
         Bundle passedArgs = getArguments();
 
         stepList = passedArgs.getParcelableArrayList(LIST_EXTRAS);
         recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
 
         if (savedInstanceState != null) {
-            long exoplayerPosition = savedInstanceState.getLong(EXOPLAYER_EXTRA);
-            exoPlayer.seekTo(exoplayerPosition);
+            step = savedInstanceState.getParcelable(STEP_EXTRAS);
+            //Used to restore the exoPlayer to it's before-rotated position
+            exoPlayerPosition = savedInstanceState.getLong(EXOPLAYER_EXTRA);
         }
 
         if (!mTwoPane) {
             step = passedArgs.getParcelable(STEP_EXTRAS);
-            getActivity().setTitle(step.getStepShortDescription());
+            getActivity().setTitle(recipe.getRecipeName());
             populateUI(getContext());
             initializeFullScreenButton();
-            initializeButtons();
-            hideButtons();
         }
 
         return rootView;
@@ -96,6 +91,12 @@ public class StepDetailFragment extends Fragment {
             initializePlayer(context, Uri.parse(step.getStepUrl()));
         }
 
+        if (step.getStepUrl().isEmpty() && step.getStepThumbnailUrl().isEmpty()) {
+            simpleExoPlayerView.setVisibility(View.GONE);
+        } else {
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
+        }
+
         //Set the Text on the description view to the step description
         stepDescription.setText(step.getStepDescription());
     }
@@ -103,9 +104,7 @@ public class StepDetailFragment extends Fragment {
     public void receiveStepInterface(Context context, Step currentStep) {
         step = currentStep;
         populateUI(context);
-        initializeButtons();
         initializeFullScreenButton();
-        hideButtons();
         Log.v(LOG_TAG, currentStep + "");
     }
 
@@ -127,6 +126,7 @@ public class StepDetailFragment extends Fragment {
 
             exoPlayer.prepare(mediaSource);
             simpleExoPlayerView.setPlayer(exoPlayer);
+            exoPlayer.seekTo(exoPlayerPosition);
             exoPlayer.setPlayWhenReady(true);
         } else {
             releasePlayer();
@@ -134,26 +134,68 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    private void goFullscreen() {
-        FrameLayout.LayoutParams params =
-                (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        simpleExoPlayerView.setLayoutParams(params);
-        fullscreenIcon.setImageResource(R.drawable.compress_white);
-        previousStep.setVisibility(View.GONE);
-        nextStep.setVisibility(View.GONE);
+/*    private void goFullScreenRotate() {
+        final Activity activity = getActivity();
+        int orientation = 0;
+        Log.v(LOG_TAG, "Rotation: " + getActivity().getWindowManager().getDefaultDisplay().getRotation());
+        if (activity != null) {
+            orientation = activity.getWindowManager().getDefaultDisplay().getRotation();
+            Log.v(LOG_TAG, "Current Orientation Value: " + orientation);
+        }
+        OrientationEventListener orientationEventListener = new OrientationEventListener(getContext(), SensorManager.SENSOR_DELAY_NORMAL) {
+            @Override
+            public void onOrientationChanged(int rotation) {
+                Log.v(LOG_TAG, "Orientation new: " + rotation);
+                if (rotation == 0 || rotation == 180){
+                    setFullScreenLayoutParams(rotation);
+                } else if (rotation == 90){
+                    setFullScreenLayoutParams(rotation);
+                } else if (rotation == 270){
+                    setFullScreenLayoutParams(rotation);
+                }
+            }
+            };
+        orientationEventListener.enable();
+        switch (orientation) {
+            case 0:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                setFullScreenLayoutParams(orientation);
+                break;
+            case 1:
+
+                setFullScreenLayoutParams(orientation);
+                break;
+            case 3:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                setFullScreenLayoutParams(orientation);
+                break;
+        }
+    }*/
+
+    private void goFullscreenTwoPane() {
+        PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
+        fullscreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
+        if (mTwoPane) {
+            FrameLayout.LayoutParams params =
+                    (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            fullscreenIcon.setImageResource(R.drawable.compress_white);
+            simpleExoPlayerView.setLayoutParams(params);
+        }
     }
 
-    private void closeFullscreen() {
-        FrameLayout.LayoutParams params =
-                (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        params.height = (int) getResources().getDimension(R.dimen.exo_player_height);
-        simpleExoPlayerView.setLayoutParams(params);
-        fullscreenIcon.setImageResource(R.drawable.enlarge_white);
-        nextStep.setVisibility(View.VISIBLE);
-        previousStep.setVisibility(View.VISIBLE);
+    private void closeFullscreenTwoPane() {
+        PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
+        fullscreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
+        if (mTwoPane) {
+            FrameLayout.LayoutParams params =
+                    (FrameLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = (int) getResources().getDimension(R.dimen.exo_player_height);
+            simpleExoPlayerView.setLayoutParams(params);
+            fullscreenIcon.setImageResource(R.drawable.enlarge_white);
+        }
     }
 
 
@@ -165,72 +207,11 @@ public class StepDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!exoFullscreen) {
-                    goFullscreen();
+                    goFullscreenTwoPane();
                     exoFullscreen = true;
                 } else {
-                    closeFullscreen();
+                    closeFullscreenTwoPane();
                     exoFullscreen = false;
-                }
-            }
-        });
-    }
-
-    /**
-     * This method is used to retrieve the previous Step from the step list
-     */
-    private void getPreviousStep() {
-        previousStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (step.getStepId() > 0) {
-                    int currentStep;
-                    currentStep = step.getStepId();
-                    step = stepList.get(currentStep - 1);
-                    refreshFragment();
-                    Log.v(LOG_TAG, step.getStepId() + "previous step");
-                    Log.v(LOG_TAG, stepList.size() + "Size");
-                }
-
-                if (step.getStepId() < stepList.size() - 1 || (step.getStepId() == stepList.size() && recipe.getRecipeName().equals("Yellow Cake"))) {
-                    nextStep.setVisibility(View.VISIBLE);
-                }
-
-                if (step.getStepId() == 0) {
-                    previousStep.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    private void refreshFragment() {
-        populateUI(getContext());
-        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.step_detail_container, this);
-    }
-
-    /**
-     * This method is used to retrieve the next Step from the list
-     * Special case for Yellow Cake as the data was not in order
-     */
-    private void getNextStep() {
-        nextStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (step.getStepId() < stepList.size() - 1 || ((recipe.getRecipeName().equals("Yellow Cake")) && step.getStepId() < stepList.size())) {
-                    int currentStep;
-                    currentStep = step.getStepId();
-                    step = stepList.get(currentStep + 1);
-                    refreshFragment();
-                    Log.v(LOG_TAG, step.getStepId() + "next step");
-                    Log.v(LOG_TAG, stepList.size() + "Size");
-                }
-
-                if (step.getStepId() >= 1) {
-                    previousStep.setVisibility(View.VISIBLE);
-                }
-
-                if (step.getStepId() == stepList.size() - 1 || (step.getStepId() == stepList.size() && recipe.getRecipeName().equals("Yellow Cake"))) {
-                    nextStep.setVisibility(View.GONE);
                 }
             }
         });
@@ -239,37 +220,13 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(EXOPLAYER_EXTRA, exoPlayer.getCurrentPosition());
-        //TODO Implement both methods to handle phone rotations
+        if (exoPlayer != null) {
+            outState.putLong(EXOPLAYER_EXTRA, exoPlayer.getCurrentPosition());
+        }
+        outState.putParcelable(STEP_EXTRAS, step);
     }
 
-
-    /**
-     * Method used to initially hide the buttons
-     */
-    private void hideButtons() {
-        if (step.getStepId() == 0) {
-            previousStep.setVisibility(View.GONE);
-        }
-
-        if (step.getStepId() == stepList.size() - 1 && !(recipe.getRecipeName().equals("Yellow Cake"))) {
-            nextStep.setVisibility(View.GONE);
-        }
-
-        if (step.getStepId() == stepList.size() && recipe.getRecipeName().equals("Yellow Cake")) {
-            nextStep.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Used to initialize both buttons
-     */
-    private void initializeButtons() {
-        //Initialize both onClickListeners for both buttons
-        getNextStep();
-        getPreviousStep();
-    }
-
+    //
     private void releasePlayer() {
         //Stop and release the player to avoid Memory leaks
         exoPlayer.stop();
@@ -292,4 +249,5 @@ public class StepDetailFragment extends Fragment {
             releasePlayer();
         }
     }
+
 }

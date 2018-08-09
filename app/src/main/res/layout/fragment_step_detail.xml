@@ -28,23 +28,5 @@
         android:textAlignment="center"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/previous_step"
-        android:layout_width="@dimen/button_dimensions"
-        android:layout_height="@dimen/button_dimensions"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@drawable/left_arrow" />
-
-    <Button
-        android:id="@+id/next_step"
-        android:layout_width="@dimen/button_dimensions"
-        android:layout_height="@dimen/button_dimensions"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|end"
-        android:background="@drawable/right_arrow" />
-
 
 </RelativeLayout>
