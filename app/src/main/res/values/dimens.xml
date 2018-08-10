@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Related to Layout/View dimensions -->
-    <dimen name="exo_player_height">350dp</dimen>
-    <dimen name="button_dimensions">50dp</dimen>
-    <dimen name="fragment_step_layout_margin">16dp</dimen>
+    <!-- Related to Widget dimensions -->
+    <dimen name="widget_layout_margin">16dp</dimen>
+    <dimen name="widget_list_margin">8dp</dimen>
+    <!-- Dimens related to recipe list/Master List fragment -->
     <dimen name="recipe_list_card_width">450dp</dimen>
     <dimen name="recipe_list_card_height">125dp</dimen>
     <dimen name="recipe_list_layout_margin">16dp</dimen>
     <dimen name="recipe_list_text_view_margin">10dp</dimen>
+    <dimen name="detail_activity_image_height">220dp</dimen>
+    <dimen name="detail_activity_padding">16dp</dimen>
+    <!-- Dimens for Step List -->
+    <dimen name="step_list_margin">5dp</dimen>
+    <dimen name="step_list_layout_height">25dp</dimen>
+    <dimen name="step_list_layout_width">350dp</dimen>
+    <dimen name="step_list_layout_margin">16dp</dimen>
+    <dimen name="step_list_card_radius">7dp</dimen>
+    <!-- Dimens for Step Details fragment -->
     <dimen name="step_Detail_top_margin">16dp</dimen>
-
+    <dimen name="exo_player_height">350dp</dimen>
     <!-- Related to Text Sizes -->
     <dimen name="text_size">12sp</dimen>
+    <dimen name="widget_text_size_large">24sp</dimen>
+    <dimen name="widget_text_size_small">15sp</dimen>
+    <dimen name="recipe_list_name_text_size">30sp</dimen>
+
 
     <!--
 Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
-    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_margin">0dp</dimen>
 </resources>

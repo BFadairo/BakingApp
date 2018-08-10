@@ -15,11 +15,12 @@ import java.util.List;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
+    private Context mContext;
     private final List<Step> mSteps;
     private final AdapterOnClick mClickHandler;
 
     public StepAdapter(Context context, List<Step> steps, AdapterOnClick onClick) {
-        Context mContext = context;
+        mContext = context;
         mSteps = steps;
         mClickHandler = onClick;
     }
@@ -27,10 +28,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        mContext = parent.getContext();
 
         //Create a new view
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View textView =
                 inflater.inflate(R.layout.step_list, parent, false);
 
@@ -43,12 +44,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
         Step currentStep = mSteps.get(position);
 
+        String stepFormatted = mContext.getResources().getString(R.string.step_number_format, String.valueOf(currentStep.getStepId()));
+
         TextView stepNumberView = holder.stepNumberView;
 
         TextView stepDescriptionView = holder.stepDescriptionView;
 
         //Yellow cake seems to be missing a step below used to handle
-        stepNumberView.setText("Step " + String.valueOf(position) + ":");
+        stepNumberView.setText(stepFormatted);
 
         stepDescriptionView.setText(currentStep.getStepShortDescription());
 

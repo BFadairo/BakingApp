@@ -3,6 +3,8 @@ package com.example.android.bakingapp;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.android.bakingapp.Fragments.IngredientFragment;
 import com.example.android.bakingapp.Fragments.StepDetailFragment;
@@ -30,6 +32,9 @@ public class DetailActivity extends AppCompatActivity implements StepFragment.Se
         //Get the intent that started the Activity and put it into a Recipe Object
         if (savedInstanceState == null) {
             Recipe recipe = getIntent().getParcelableExtra(RECIPE_EXTRAS);
+
+            ImageView detailImageView = findViewById(R.id.detail_recipe_image);
+
             ArrayList<Step> stepList = recipe.getSteps();
 
             this.setTitle(recipe.getRecipeName());
@@ -61,6 +66,10 @@ public class DetailActivity extends AppCompatActivity implements StepFragment.Se
                 fragmentManager.beginTransaction()
                         .add(R.id.step_detail_container, stepDetailFragment)
                         .commit();
+            }
+
+            if (recipe.getFoodImage().isEmpty()) {
+                detailImageView.setVisibility(View.GONE);
             }
         }
     }

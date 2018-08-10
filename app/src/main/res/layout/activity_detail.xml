@@ -13,16 +13,16 @@
         <ImageView
             android:id="@+id/detail_recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="@dimen/detail_activity_image_height"
             android:scaleType="centerCrop"
             android:contentDescription="@string/detail_activity_image_description"
-            android:src="@drawable/cheesecake" />
+            tools:ignore="InconsistentLayout" />
 
         <FrameLayout
             android:id="@+id/ingredient_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp" />
+            android:padding="@dimen/detail_activity_padding" />
 
         <FrameLayout
             android:id="@+id/step_container"

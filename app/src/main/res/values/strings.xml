@@ -10,16 +10,13 @@
     <string name="app_widget_text_hint">Ingredient List</string>
 
     <!-- Strings related to ViewFields -->
-    <string name="serving_size">Serving Size:</string>
     <string name="step_description">Description</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="configure">Configure</string>
 
     <!-- Strings -->
     <string name="recipe_list">Recipe List</string>
     <string name="step_number_hunt">Step #</string>
+    <string name="step_number_format">Step %1$s:</string>
 
-    <!-- Content Description Sctrings -->
+    <!-- Content Description Strings -->
     <string name="detail_activity_image_description">Recipe Image</string>
 </resources>

@@ -6,7 +6,8 @@
     android:layout_gravity="bottom"
     android:background="#CC000000"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +18,8 @@
 
         <ImageButton
             android:id="@id/exo_prev"
-            style="@style/ExoMediaButton.Previous" />
+            style="@style/ExoMediaButton.Previous"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@id/exo_rew"
@@ -26,27 +28,33 @@
 
         <ImageButton
             android:id="@id/exo_shuffle"
-            style="@style/ExoMediaButton.Shuffle" />
+            style="@style/ExoMediaButton.Shuffle"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@id/exo_repeat_toggle"
-            style="@style/ExoMediaButton" />
+            style="@style/ExoMediaButton"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play" />
+            style="@style/ExoMediaButton.Play"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause" />
+            style="@style/ExoMediaButton.Pause"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@id/exo_ffwd"
-            style="@style/ExoMediaButton.FastForward" />
+            style="@style/ExoMediaButton.FastForward"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@id/exo_next"
-            style="@style/ExoMediaButton.Next" />
+            style="@style/ExoMediaButton.Next"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
@@ -89,7 +97,8 @@
             android:id="@+id/exo_fullscreen_button"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_gravity="right">
+            android:layout_gravity="right"
+            tools:ignore="RtlHardcoded">
 
             <ImageView
                 android:id="@+id/exo_fullscreen_icon"
@@ -98,7 +107,8 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/enlarge_white" />
+                android:src="@drawable/enlarge_white"
+                tools:ignore="ContentDescription" />
 
         </FrameLayout>
 

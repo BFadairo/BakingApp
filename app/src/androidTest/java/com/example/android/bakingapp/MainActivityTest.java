@@ -27,8 +27,7 @@ public class MainActivityTest {
     public final ActivityTestRule<MainActivity> mActivityTestRule
             = new ActivityTestRule<>(MainActivity.class);
     private IdlingResource mIdlingResource;
-    public String RECIPE_NAME = "Yellow Cake";
-    private String[] RECIPE_NAMES = new String[]{"Nutella Pie", "Brownies", "Yellow Cake", "Cheesecake"};
+    private final String[] RECIPE_NAMES = new String[]{"Nutella Pie", "Brownies", "Yellow Cake", "Cheesecake"};
 
     @Before
     public void registerIdlingResource() {
@@ -45,6 +44,7 @@ public class MainActivityTest {
         }
         onView(withId(R.id.recycler_view_master))
                 .perform(RecyclerViewActions.scrollToPosition(0));
+        String RECIPE_NAME = "Yellow Cake";
         onView(withText(RECIPE_NAME)).check(matches(isDisplayed()));
     }
 

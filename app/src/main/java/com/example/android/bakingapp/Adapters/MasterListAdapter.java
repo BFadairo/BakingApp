@@ -11,19 +11,20 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.ViewHolder> {
 
     private final static String LOG_TAG = MasterListAdapter.class.getSimpleName();
 
+    private Context mContext;
     private List<Recipe> mRecipes;
     private final AdapterOnClick clickHandler;
 
     public MasterListAdapter(Context mContext, List<Recipe> recipes, AdapterOnClick onClickHandler) {
-        Context mContext1 = mContext;
+        this.mContext = mContext;
         this.mRecipes = recipes;
         this.clickHandler = onClickHandler;
     }
@@ -37,10 +38,10 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        mContext = parent.getContext();
 
         //Create a new view
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View textView =
                 inflater.inflate(R.layout.recipe_list, parent, false);
 
@@ -55,32 +56,13 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
 
         ImageView recipeImage = holder.recipeImage;
 
-        ArrayList<Integer> listImages = new ArrayList<>();
-
-        listImages.add(R.drawable.brownies);
-
-        listImages.add(R.drawable.cheesecake);
-
-
-        // TODO: To Be Implemented once other images for Recipes are found
-//        int imagePosition = listImages.get(position);
-
-        //recipeImage.setImageResource(imagePosition);
+        if (!(currentRecipe.getFoodImage().isEmpty())) {
+            Picasso.get().load(currentRecipe.getFoodImage()).into(recipeImage);
+            recipeImage.setVisibility(View.VISIBLE);
+        } else {
+            recipeImage.setVisibility(View.GONE);
+        }
         recipeName.setText(currentRecipe.getRecipeName());
-/*        switch (currentRecipe.getRecipeName()) {
-            case "Brownies":
-                recipeImage.setImageResource(R.drawable.brownies);
-                break;
-            case "Nutella Pie":
-                recipeImage.setImageResource(R.drawable.cheesecake);
-                break;
-            case "Yellow Cake":
-                recipeImage.setImageResource(R.drawable.cheesecake);
-                break;
-            case "Cheesecake":
-                recipeImage.setImageResource(R.drawable.cheesecake);
-                break;
-        }*/
     }
 
     @Override

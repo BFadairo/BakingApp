@@ -151,9 +151,9 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.Ad
         startActivity(detailActivity);
         widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         widgetIntent.putExtra("Extra", recipe);
+
         if (recipe != null) {
             getActivity().sendBroadcast(widgetIntent);
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.Fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,10 +45,7 @@ public class StepDetailFragment extends Fragment {
     private TextView stepDescription;
     private PlayerView simpleExoPlayerView;
     private ImageView fullscreenIcon;
-    private Button nextStep, previousStep;
-    private ArrayList<Step> stepList;
     private Step step;
-    private Recipe recipe;
     private long exoPlayerPosition;
 
     private final String EXOPLAYER_EXTRA = "exoplayer_extras";
@@ -64,8 +61,8 @@ public class StepDetailFragment extends Fragment {
 
         Bundle passedArgs = getArguments();
 
-        stepList = passedArgs.getParcelableArrayList(LIST_EXTRAS);
-        recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
+        ArrayList<Step> stepList = passedArgs.getParcelableArrayList(LIST_EXTRAS);
+        Recipe recipe = passedArgs.getParcelable(RECIPE_EXTRAS);
 
         if (savedInstanceState != null) {
             step = savedInstanceState.getParcelable(STEP_EXTRAS);
@@ -134,44 +131,6 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-/*    private void goFullScreenRotate() {
-        final Activity activity = getActivity();
-        int orientation = 0;
-        Log.v(LOG_TAG, "Rotation: " + getActivity().getWindowManager().getDefaultDisplay().getRotation());
-        if (activity != null) {
-            orientation = activity.getWindowManager().getDefaultDisplay().getRotation();
-            Log.v(LOG_TAG, "Current Orientation Value: " + orientation);
-        }
-        OrientationEventListener orientationEventListener = new OrientationEventListener(getContext(), SensorManager.SENSOR_DELAY_NORMAL) {
-            @Override
-            public void onOrientationChanged(int rotation) {
-                Log.v(LOG_TAG, "Orientation new: " + rotation);
-                if (rotation == 0 || rotation == 180){
-                    setFullScreenLayoutParams(rotation);
-                } else if (rotation == 90){
-                    setFullScreenLayoutParams(rotation);
-                } else if (rotation == 270){
-                    setFullScreenLayoutParams(rotation);
-                }
-            }
-            };
-        orientationEventListener.enable();
-        switch (orientation) {
-            case 0:
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                setFullScreenLayoutParams(orientation);
-                break;
-            case 1:
-
-                setFullScreenLayoutParams(orientation);
-                break;
-            case 3:
-                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                setFullScreenLayoutParams(orientation);
-                break;
-        }
-    }*/
-
     private void goFullscreenTwoPane() {
         PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
         fullscreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
@@ -203,18 +162,35 @@ public class StepDetailFragment extends Fragment {
         PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
         FrameLayout fullscreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         fullscreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
-        fullscreenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!exoFullscreen) {
-                    goFullscreenTwoPane();
-                    exoFullscreen = true;
-                } else {
-                    closeFullscreenTwoPane();
-                    exoFullscreen = false;
+        if (mTwoPane) {
+            fullscreenButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!exoFullscreen) {
+                        goFullscreenTwoPane();
+                        exoFullscreen = true;
+                    } else {
+                        closeFullscreenTwoPane();
+                        exoFullscreen = false;
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            fullscreenButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!exoFullscreen) {
+                        if (getActivity().getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                            fullscreenIcon.setImageResource(R.drawable.compress_white);
+                        } else {
+                            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                            fullscreenIcon.setImageResource(R.drawable.enlarge_white);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     @Override

@@ -17,8 +17,7 @@
             android:adjustViewBounds="true"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/detail_activity_image_description"
-            android:src="@drawable/cheesecake" />
+            android:contentDescription="@string/detail_activity_image_description" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,8 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/recipe_list_text_view_margin"
                 android:hint="@string/recipe_name_hint"
-                android:textColor="@android:color/white"
-                android:textSize="30sp"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/recipe_list_name_text_size"
                 android:textStyle="bold" />
         </LinearLayout>
 

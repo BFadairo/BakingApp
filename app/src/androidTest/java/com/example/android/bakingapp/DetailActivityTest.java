@@ -28,7 +28,7 @@ public class DetailActivityTest {
 
     private IdlingResource mIdlingResource;
     private String[] RECIPE_NAMES = new String[]{"Nutella Pie", "Brownies", "Yellow Cake", "Cheesecake"};
-    private int currentRecipe = 3;
+    private final int currentRecipe = 3;
 
     @Before
     public void registerIdlingResource() {

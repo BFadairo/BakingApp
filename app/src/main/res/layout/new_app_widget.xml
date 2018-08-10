@@ -2,16 +2,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorAccent"
+    android:background="#e3f2fd"
     android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/widget_recipe_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/widget_layout_margin"
         android:hint="@string/recipe_name_hint"
-        android:textSize="24sp"
+        android:textSize="@dimen/widget_text_size_large"
+        android:textStyle="bold"
         app:fontFamily="sans-serif" />
 
     <TextView
@@ -20,9 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/widget_recipe_name"
         android:layout_centerInParent="true"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/widget_list_margin"
         android:hint="@string/app_widget_text_hint"
-        android:textSize="12sp"
+        android:textSize="@dimen/widget_text_size_small"
         android:textStyle="bold|italic" />
 
 </RelativeLayout>

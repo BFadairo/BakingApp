@@ -15,20 +15,21 @@ import java.util.List;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 
+    private Context mContext;
     private final List<Ingredient> ingredientList;
 
     public IngredientAdapter(Context context, List<Ingredient> ingredients) {
-        Context mContext = context;
+        this.mContext = context;
         this.ingredientList = ingredients;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        mContext = parent.getContext();
 
         //Create a new view
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View textView =
                 inflater.inflate(R.layout.ingredient_list, parent, false);
 
