@@ -72,7 +72,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.Ad
         // Get a reference to the RecyclerView in the fragment_master_list xml layout file
         recyclerView = rootView.findViewById(R.id.recycler_view_master);
         getIdlingResource();
-        //Perform the network request and populate the UI
+        //Perform the network request and populate the UI if the Recipe list is empty
         if (savedInstanceState != null) {
             mRecipes = savedInstanceState.getParcelableArrayList(RECIPE_EXTRAS);
             populateUi();
