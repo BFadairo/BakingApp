@@ -91,7 +91,9 @@ public class StepDetailFragment extends Fragment {
     private void populateUI(Context context) {
         //Retrieve the Video url from the Step object and initialize player with it
         if (step.getStepUrl().isEmpty()) {
+            //Removed for now
             //initializePlayer(context, Uri.parse(step.getStepThumbnailUrl()));
+            //Load the first frame of the thumbnail url and insert into ImageView
             long requestedFrame = 0;
             RequestOptions requestOptions = new RequestOptions().set(TARGET_FRAME, requestedFrame).set(FRAME_OPTION, 0);
             Glide.with(context).load(step.getStepThumbnailUrl()).apply(requestOptions).into(thumbnailView);
