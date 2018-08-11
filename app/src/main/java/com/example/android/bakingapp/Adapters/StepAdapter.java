@@ -44,7 +44,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
         Step currentStep = mSteps.get(position);
 
-        String stepFormatted = mContext.getResources().getString(R.string.step_number_format, String.valueOf(currentStep.getStepId()));
+        String stepFormatted = mContext.getResources().getString(R.string.step_number_format, String.valueOf(position));
 
         TextView stepNumberView = holder.stepNumberView;
 

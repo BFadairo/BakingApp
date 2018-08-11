@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
@@ -32,6 +33,8 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
+import static com.bumptech.glide.load.resource.bitmap.VideoDecoder.FRAME_OPTION;
+import static com.bumptech.glide.load.resource.bitmap.VideoDecoder.TARGET_FRAME;
 import static com.example.android.bakingapp.Fragments.StepFragment.STEP_EXTRAS;
 import static com.example.android.bakingapp.MainActivity.RECIPE_EXTRAS;
 import static com.example.android.bakingapp.MainActivity.mTwoPane;
@@ -44,11 +47,13 @@ public class StepDetailFragment extends Fragment {
     private static boolean exoFullscreen;
     private TextView stepDescription;
     private PlayerView simpleExoPlayerView;
-    private ImageView fullscreenIcon;
+    private final String EXOPLAYER_BOOLEAN = "exoplayer_boolean";
     private Step step;
     private long exoPlayerPosition;
+    private ImageView fullscreenIcon, thumbnailView;
 
     private final String EXOPLAYER_EXTRA = "exoplayer_extras";
+    private Boolean exoPlayerState;
 
     @Nullable
     @Override
@@ -59,6 +64,8 @@ public class StepDetailFragment extends Fragment {
 
         stepDescription = rootView.findViewById(R.id.step_detail_description);
 
+        thumbnailView = rootView.findViewById(R.id.thumbnail_image);
+
         Bundle passedArgs = getArguments();
 
         ArrayList<Step> stepList = passedArgs.getParcelableArrayList(LIST_EXTRAS);
@@ -68,6 +75,7 @@ public class StepDetailFragment extends Fragment {
             step = savedInstanceState.getParcelable(STEP_EXTRAS);
             //Used to restore the exoPlayer to it's before-rotated position
             exoPlayerPosition = savedInstanceState.getLong(EXOPLAYER_EXTRA);
+            exoPlayerState = savedInstanceState.getBoolean(EXOPLAYER_BOOLEAN);
         }
 
         if (!mTwoPane) {
@@ -83,9 +91,19 @@ public class StepDetailFragment extends Fragment {
     private void populateUI(Context context) {
         //Retrieve the Video url from the Step object and initialize player with it
         if (step.getStepUrl().isEmpty()) {
-            initializePlayer(context, Uri.parse(step.getStepThumbnailUrl()));
+            //initializePlayer(context, Uri.parse(step.getStepThumbnailUrl()));
+            long requestedFrame = 0;
+            RequestOptions requestOptions = new RequestOptions().set(TARGET_FRAME, requestedFrame).set(FRAME_OPTION, 0);
+            Glide.with(context).load(step.getStepThumbnailUrl()).apply(requestOptions).into(thumbnailView);
+            thumbnailView.setVisibility(View.VISIBLE);
+            simpleExoPlayerView.setVisibility(View.GONE);
+            if (mTwoPane && exoPlayer != null) {
+                releasePlayer();
+            }
         } else {
             initializePlayer(context, Uri.parse(step.getStepUrl()));
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
+            thumbnailView.setVisibility(View.GONE);
         }
 
         if (step.getStepUrl().isEmpty() && step.getStepThumbnailUrl().isEmpty()) {
@@ -102,7 +120,6 @@ public class StepDetailFragment extends Fragment {
         step = currentStep;
         populateUI(context);
         initializeFullScreenButton();
-        Log.v(LOG_TAG, currentStep + "");
     }
 
     private void initializePlayer(Context context, Uri mediaLink) {
@@ -124,10 +141,14 @@ public class StepDetailFragment extends Fragment {
             exoPlayer.prepare(mediaSource);
             simpleExoPlayerView.setPlayer(exoPlayer);
             exoPlayer.seekTo(exoPlayerPosition);
-            exoPlayer.setPlayWhenReady(true);
+            if (exoPlayerState != null) {
+                exoPlayer.setPlayWhenReady(exoPlayerState);
+            } else {
+                exoPlayer.setPlayWhenReady(true);
+            }
         } else {
             releasePlayer();
-            populateUI(getContext());
+            populateUI(context);
         }
     }
 
@@ -198,6 +219,7 @@ public class StepDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (exoPlayer != null) {
             outState.putLong(EXOPLAYER_EXTRA, exoPlayer.getCurrentPosition());
+            outState.putBoolean(EXOPLAYER_BOOLEAN, exoPlayer.getPlayWhenReady());
         }
         outState.putParcelable(STEP_EXTRAS, step);
     }
@@ -213,7 +235,15 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (exoPlayer != null) {
+        if (exoPlayer != null && Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (exoPlayer != null && Util.SDK_INT <= 23) {
             releasePlayer();
         }
     }

@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         ImageView recipeImage = holder.recipeImage;
 
         if (!(currentRecipe.getFoodImage().isEmpty())) {
-            Picasso.get().load(currentRecipe.getFoodImage()).into(recipeImage);
+            Glide.with(mContext).load(currentRecipe.getFoodImage()).into(recipeImage);
             recipeImage.setVisibility(View.VISIBLE);
         } else {
             recipeImage.setVisibility(View.GONE);

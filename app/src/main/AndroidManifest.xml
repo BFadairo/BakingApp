@@ -22,8 +22,11 @@
         </activity>
         <activity
             android:name=".DetailActivity"
-            android:launchMode="singleTop" />
-        <activity android:name=".StepActivity" />
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".StepActivity"
+            android:parentActivityName=".DetailActivity" />
 
         <receiver android:name=".NewAppWidget">
             <intent-filter>

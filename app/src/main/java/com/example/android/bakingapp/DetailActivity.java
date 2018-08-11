@@ -68,7 +68,7 @@ public class DetailActivity extends AppCompatActivity implements StepFragment.Se
                         .commit();
             }
 
-            if (recipe.getFoodImage().isEmpty()) {
+            if (recipe.getFoodImage().isEmpty() && !mTwoPane) {
                 detailImageView.setVisibility(View.GONE);
             }
         }
@@ -76,8 +76,10 @@ public class DetailActivity extends AppCompatActivity implements StepFragment.Se
 
     @Override
     public void sendSteps(Step step) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("Step", step);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        stepDetailFragment.setArguments(argsToPass);
+        stepDetailFragment.setArguments(bundle);
         fragmentManager.beginTransaction()
                 .replace(R.id.step_detail_container, stepDetailFragment)
                 .commit();
